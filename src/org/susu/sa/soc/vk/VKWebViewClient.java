@@ -19,10 +19,10 @@ public abstract class VKWebViewClient extends WebViewClient {
                     throw new Exception("Error in url");
             }
         } catch (Exception e) {
-            onAuthFailure();
+            onAuthFailure(e);
         }
     }
 
     public abstract void onAuthSuccess(String accessToken, long userId);
-    public abstract void onAuthFailure();
+    public abstract void onAuthFailure(Exception e);
 }

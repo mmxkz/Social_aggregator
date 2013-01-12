@@ -1,0 +1,5 @@
+<resources>
+    <color name="post_color">#ffffff</color>
+    <color name="post_activity_color">#ffffff</color>
+    <color name="post_textColor">#000000</color>
+</resources>

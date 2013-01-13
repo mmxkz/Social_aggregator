@@ -1,41 +1,63 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:orientation="vertical"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:background="@color/post_color">
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:orientation="horizontal"
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/post_color">
+    <ImageView
+            android:id="@+id/icon"
+            android:layout_width="@android:dimen/app_icon_size"
+            android:layout_height="@android:dimen/app_icon_size"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:src="@drawable/ic_launcher"/>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_alignTop="@+id/imageView"
+            android:layout_alignBottom="@+id/imageView"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@android:dimen/app_icon_size"
+            android:layout_marginRight="16dp"
+            android:background="@color/post_color">
+
+        <TextView android:id="@+id/name"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:textColor="@color/post_name_textColor"
+                  android:textStyle="bold"
+                  android:text="@string/nickname_text"
+                  android:focusable="false"
+                  android:focusableInTouchMode="false"/>
+
+        <TextView android:id="@+id/message"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
-                  android:background="@color/post_color">
+                  android:textColor="@color/post_message_textColor"
+                  android:text="@string/message_text"
+                  android:focusable="false"
+                  android:focusableInTouchMode="false"
+                />
 
-        <ImageView
-                android:id="@+id/icon"
-                android:layout_width="40px"
-                android:layout_height="40px"
-                android:src="@drawable/ic_launcher">
-        </ImageView>
+        <TextView android:id="@+id/date"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:textSize="10dp"
+                  android:textColor="@color/post_date_textColor"
+                  android:text="@string/date_text"
+                  android:focusable="false"
+                  android:focusableInTouchMode="false"
+                />
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                      android:orientation="vertical"
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:background="@color/post_color">
-
-            <TextView android:id="@+id/name"
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:textColor="@color/post_textColor"
-                      android:text="Some nickname"/>
-
-            <TextView android:id="@+id/message"
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:textColor="@color/post_textColor"
-                      android:text="Some message"/>
-        </LinearLayout>
     </LinearLayout>
-
+    <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:id="@+id/sn_logo"
+            android:layout_alignParentRight="true"
+            android:focusableInTouchMode="false"
+            android:focusable="false"
+            android:src="@drawable/vkontakte_logo"/>
 </RelativeLayout>
 

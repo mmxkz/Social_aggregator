@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Social_aggregator</string>
+    <string name="date_text">Some date</string>
+    <string name="message_text">Some message</string>
+    <string name="nickname_text">Some nickname</string>
 
 </resources>

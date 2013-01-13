@@ -1,0 +1,8 @@
+<resources>
+    <color name="post_color">#ffffff</color>
+    <color name="post_activity_color">#ffffff</color>
+    <color name="post_message_textColor">#000000</color>
+    <color name="post_name_textColor">#ff0064ff</color>
+    <color name="post_date_textColor">#808080</color>
+    <color name="listview_divider_color">@color/post_color</color>
+</resources>

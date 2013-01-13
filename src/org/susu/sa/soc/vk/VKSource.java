@@ -1,31 +1,40 @@
 package org.susu.sa.soc.vk;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.WebView;
 import com.perm.kate.api.*;
 import org.json.JSONException;
-import org.susu.sa.soc.*;
+import org.susu.sa.soc.ISource;
+import org.susu.sa.soc.Post;
+import org.susu.sa.soc.PostComment;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Date;
 
 public class VKSource implements ISource {
 
+    public static final String LOG_KEY = "ISource::VKSource";
     public static final String API_ID = "3354665";
 
     private long userId;
     private String accessToken;
     private Api api;
 
-    private HashMap<Long, User> cachedUsers = new HashMap<>();
+    private VKUserCache cache;
 
     public VKSource(long userId, String accessToken) {
         this.userId = userId;
         this.accessToken = accessToken;
         this.api = new Api(this.accessToken, API_ID);
+        cache = new VKUserCache(api);
     }
 
     public static void callWebView(Context context, WebView webView, VKWebViewClient client) {
@@ -46,19 +55,24 @@ public class VKSource implements ISource {
     @Override
     public ArrayList<Post> getPosts(int count, int offset) throws Exception {
         ArrayList<Post> posts = new ArrayList<>();
-        ArrayList<Long> uids = new ArrayList<>();
-
         // Getting messages
-        for (WallMessage message : api.getWallMessages(userId, count, offset)) {
-            if (!cachedUsers.containsKey(message.from_id))
-                uids.add(message.from_id);
-            posts.add(new VKPost(this, message));
+        ArrayList<WallMessage> wallMessages = api.getWallMessages(userId, count, offset);
+        for (WallMessage message : wallMessages) cache.add(message.from_id);
+        cache.update();
+
+        // Settings messages
+        for (WallMessage message : wallMessages) {
+            User user = cache.get(message.from_id);
+            posts.add(
+                    new VKPost(this,
+                            message.id, nameByUser(user),
+                            message.text,
+                            new Date(message.date),
+                            getUserPictureById(user.uid)
+                    )
+            );
         }
 
-        // Getting users
-        for (User profile: api.getProfiles(uids, null, null, null)) {
-            cachedUsers.put(Long.valueOf(profile.uid), profile);
-        }
         return posts;
     }
 
@@ -72,11 +86,42 @@ public class VKSource implements ISource {
     }
 
     protected ArrayList<PostComment> getComments(VKPost post, int count, int offset) throws Exception {
-       return null;
+        ArrayList<Comment> comments = api.getWallComments(null, post.getPostId(), offset, count).comments;
+        ArrayList<PostComment> postComments = new ArrayList<>();
+
+        for (Comment comment : comments) cache.add(comment.from_id);
+        cache.update();
+
+        for (Comment comment : comments) {
+            User user = cache.get(comment.from_id);
+            postComments.add(
+                    new PostComment(
+                            nameByUser(user),
+                            comment.message,
+                            new Date(comment.date),
+                            getUserPictureById(user.uid)
+                    )
+            );
+        }
+
+        return postComments;
     }
 
-    protected User getUserById(long id) {
-        if (!cachedUsers.containsKey(id)) return null;
-        return cachedUsers.get(id);
+    protected Bitmap getUserPictureById(long id) {
+        try {
+            HttpURLConnection connection = (HttpURLConnection)
+                    new URL(cache.get(id).photo).openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            return BitmapFactory.decodeStream(connection.getInputStream());
+        } catch (Exception e) {
+            Log.e(LOG_KEY, "Unable to get bitmap: " + e.getCause().toString());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private static String nameByUser(User user) {
+        return user.first_name + " " + user.last_name;
     }
 }

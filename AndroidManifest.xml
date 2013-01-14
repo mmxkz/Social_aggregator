@@ -14,5 +14,6 @@
         </activity>
 
         <activity android:name="CommentActivity"></activity>
+        <activity android:name="NewMessageActivity"></activity>
     </application>
 </manifest> 

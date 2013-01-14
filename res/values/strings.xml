@@ -4,5 +4,9 @@
     <string name="date_text">Some date</string>
     <string name="message_text">Some message</string>
     <string name="nickname_text">Some nickname</string>
+    <string name="recipient_name">Recipient</string>
+    <string name="recipient_autotext">Enter a friend\'s name or leave it empty(write to the wall)</string>
+    <string name="recipient_message">Message</string>
+    <string name="refresh_button_name">Refresh</string>
 
 </resources>

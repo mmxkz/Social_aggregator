@@ -32,7 +32,10 @@ public class CommentActivity extends Activity {
         list.setClickable(true);
 
 
-        View footerView =  ((LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.footer_view, null, false);
+        View footerView =  ((LayoutInflater)getApplicationContext()
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+                .inflate(R.layout.footer_message_view, null, false);
+
         list.addFooterView(footerView);
 
         List<Post> posts = new ArrayList<Post>();

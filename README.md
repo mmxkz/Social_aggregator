@@ -9,8 +9,13 @@ Social Aggregator
 Функционал
 ----------
 
-В первой версии доступно две социальных сети: vk.com и facabook. 
+В первой версии доступно две социальных сети: vk.com и facebook. 
 Отправка сообщений происходит на стену и в timeline соответственно.
+
+Сторонние библиотеки
+--------------------
+
+1. [Android-VKontakte-SDK](https://github.com/thest1/Android-VKontakte-SDK)
 
 Лицензия
 --------

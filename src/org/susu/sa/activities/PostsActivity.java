@@ -5,13 +5,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
-import org.susu.sa.*;
-import org.susu.sa.activities.VKLoginActivity;
+import org.susu.sa.R;
+import org.susu.sa.listview.Post;
+import org.susu.sa.listview.PostAdapter;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -69,8 +72,8 @@ public class PostsActivity extends Activity {
             }
         });
 
-        Intent intent = new Intent(getApplicationContext(), VKLoginActivity.class);
-        startActivityForResult(intent, 1);
+//        Intent intent = new Intent(getApplicationContext(), VKLoginActivity.class);
+//        startActivityForResult(intent, 1);
 
     }
 
@@ -117,4 +120,12 @@ public class PostsActivity extends Activity {
             }
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
 }

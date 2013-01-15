@@ -1,7 +1,8 @@
-package org.susu.sa;
+package org.susu.sa.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
+import org.susu.sa.R;
 
 /**
  * User: is

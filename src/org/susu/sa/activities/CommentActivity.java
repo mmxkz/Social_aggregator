@@ -1,4 +1,4 @@
-package org.susu.sa;
+package org.susu.sa.activities;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,6 +9,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
+import org.susu.sa.R;
+import org.susu.sa.listview.Post;
+import org.susu.sa.listview.PostAdapter;
 
 import java.util.ArrayList;
 import java.util.Date;

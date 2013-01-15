@@ -1,4 +1,4 @@
-package org.susu.sa;
+package org.susu.sa.listview;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -11,11 +11,11 @@ import java.util.Date;
 public class Post implements Serializable {
 
     private String message;
-    private String name;
+    private String sender;
     private Date date;
 
-    public Post(String name, String message, Date date) {
-        setName(name);
+    public Post(String sender, String message, Date date) {
+        setSender(sender);
         setMessage(message);
         setDate(date);
     }
@@ -28,12 +28,12 @@ public class Post implements Serializable {
         this.message = message;
     }
 
-    public String getName() {
-        return name;
+    public String getSender() {
+        return sender;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setSender(String sender) {
+        this.sender = sender;
     }
 
     public Date getDate() {

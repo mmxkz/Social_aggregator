@@ -1,14 +1,12 @@
-package org.susu.sa;
+package org.susu.sa.listview;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
+import org.susu.sa.R;
 
 import java.util.List;
 
@@ -64,8 +62,8 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
             view = inflater.inflate(R.layout.post_layout, null);
         }
 
-        TextView name = (TextView) view.findViewById(R.id.name);
-        name.setText(entry.getName());
+        TextView name = (TextView) view.findViewById(R.id.sender);
+        name.setText(entry.getSender());
 
         TextView message = (TextView) view.findViewById(R.id.message);
         message.setText(entry.getMessage());

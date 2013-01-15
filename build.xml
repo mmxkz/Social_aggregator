@@ -12,9 +12,9 @@
          Here are some properties you may want to change/update:
 
          source.dir
-             The name of the source directory. Default is 'src'.
+             The sender of the source directory. Default is 'src'.
          out.dir
-             The name of the output directory. Default is 'bin'.
+             The sender of the output directory. Default is 'bin'.
 
          For other overridable properties, look at the beginning of the rules
          files in the SDK, at tools/ant/build.xml

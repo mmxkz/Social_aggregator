@@ -22,7 +22,7 @@
             android:layout_marginRight="16dp"
             android:background="@color/post_color">
 
-        <TextView android:id="@+id/name"
+        <TextView android:id="@+id/sender"
                   android:layout_width="match_parent"
                   android:layout_height="match_parent"
                   android:textColor="@color/post_name_textColor"

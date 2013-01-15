@@ -54,7 +54,7 @@ public class VKSource implements ISource {
 
     @Override
     public ArrayList<Post> getPosts(int count, int offset) throws Exception {
-        ArrayList<Post> posts = new ArrayList<>();
+        ArrayList<Post> posts = new ArrayList<Post>();
         // Getting messages
         ArrayList<WallMessage> wallMessages = api.getWallMessages(userId, count, offset);
         for (WallMessage message : wallMessages) cache.add(message.from_id);
@@ -87,7 +87,7 @@ public class VKSource implements ISource {
 
     protected ArrayList<PostComment> getComments(VKPost post, int count, int offset) throws Exception {
         ArrayList<Comment> comments = api.getWallComments(null, post.getPostId(), offset, count).comments;
-        ArrayList<PostComment> postComments = new ArrayList<>();
+        ArrayList<PostComment> postComments = new ArrayList<PostComment>();
 
         for (Comment comment : comments) cache.add(comment.from_id);
         cache.update();

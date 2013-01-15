@@ -11,8 +11,8 @@ import java.util.HashMap;
 
 public class VKUserCache {
 
-    private ArrayList<Long> toReceive = new ArrayList<>();
-    private HashMap<Long, User> cache = new HashMap<>();
+    private ArrayList<Long> toReceive = new ArrayList<Long>();
+    private HashMap<Long, User> cache = new HashMap<Long, User>();
     private Api api;
 
     public VKUserCache(Api api) {

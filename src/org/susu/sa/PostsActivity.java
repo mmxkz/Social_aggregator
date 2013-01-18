@@ -1,56 +1,42 @@
 package org.susu.sa;
 
-import android.app.Activity;
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.os.StrictMode;
+import com.facebook.Session;
+import org.susu.sa.soc.ISource;
+import org.susu.sa.soc.facebook.FacebookActivity;
+import org.susu.sa.soc.facebook.FacebookSource;
+import org.susu.sa.soc.facebook.IFacebookCallback;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-public class PostsActivity extends Activity {
+public class PostsActivity extends FacebookActivity {
 
     private List<Post> posts = new ArrayList<Post>();
+    private Context context;
+    private Session session;
+    private String username;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.postactivity_layout);
+        context = this;
 
-        ListView list = (ListView) findViewById(R.id.PostsView);
-        list.setClickable(true);
-        list.setDescendantFocusability(ListView.FOCUS_BLOCK_DESCENDANTS);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
-
-        posts.add(new Post("Ilya", "OK LET'S DO IT", new Date()));
-        posts.add(new Post("Kosmaks", "LEEEEEEEEROY JEEEEEEENKINS", new Date()));
-        posts.add(new Post("Andrey", "U menya nedopusk :(", new Date()));
-        posts.add(new Post("Ovcharik", "A YA V GOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO" +
-                "OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO" +
-                "OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO" +
-            "VNE" +
-                "", new Date()));
-
-
-
-        PostAdapter adapter = new PostAdapter(this, posts);
-
-        list.setAdapter(adapter);
-
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        FacebookSource source = new FacebookSource(this, new IFacebookCallback() {
             @Override
-            public void onItemClick(AdapterView<?> arg0, View view, int position, long index) {
-                Intent comment = new Intent(getApplicationContext(), CommentActivity.class);
-                comment.putExtra("post", posts.get(position));
-
-                startActivity(comment);
+            public void onSessionStored(ISource source) {
+                try {
+                    source.newPost("Hello, World!");
+                } catch (Exception e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
             }
         });
-
     }
 }

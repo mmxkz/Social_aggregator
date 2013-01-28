@@ -71,6 +71,9 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
         TextView date = (TextView) view.findViewById(R.id.date);
         date.setText(entry.getDate().toLocaleString());
 
+//        ImageView image = (ImageView) view.findViewById(R.id.imageView);
+//        image.setImageBitmap(posts.getBitmap());
+
         return view;
     }
 
@@ -78,5 +81,10 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
     @Override
     public void onClick(View view) {
 
+    }
+
+    public void addItem(Post post) {
+        posts.add(post);
+        notifyDataSetChanged();
     }
 }

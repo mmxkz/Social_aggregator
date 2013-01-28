@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.perm.kate"
@@ -6,13 +5,4 @@
     android:versionName="1.0" 
 >
     <uses-sdk android:minSdkVersion="4" />
-=======
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.perm.kate"
-    android:versionCode="1"
-    android:versionName="1.0" 
->
-    <uses-sdk android:minSdkVersion="4" />
->>>>>>> b49d4d9e83e5292e30bc151e54afd0b39f6c5e44
 </manifest>

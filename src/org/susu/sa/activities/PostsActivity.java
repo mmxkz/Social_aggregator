@@ -4,10 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.View;
+import android.view.*;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
@@ -24,14 +21,12 @@ public class PostsActivity extends Activity {
 
     private List<Post> posts = new ArrayList<Post>();
     private final int REQUEST_LOGIN = 1;
+    private PostAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.postactivity_layout);
-
-
-
 
         ListView list = (ListView) findViewById(R.id.PostsView);
 
@@ -40,12 +35,13 @@ public class PostsActivity extends Activity {
         posts.add(new Post("Ilya", "OK LET'S DO IT", new Date()));
         posts.add(new Post("Kosmaks", "LEEEEEEEEROY JEEEEEEENKINS", new Date()));
         posts.add(new Post("Andrey", "U menya nedopusk :(", new Date()));
-        posts.add(new Post("Ovcharik", "A YA V GOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO" +
-                "OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO" +
-                "OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO" +
-            "VNE", new Date()));
 
-        PostAdapter adapter = new PostAdapter(this, posts);
+        adapter = new PostAdapter(this, posts);
+
+        adapter.addItem(new Post("Ovcharik", "A YA V GOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO" +
+                "OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO" +
+                "OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO" +
+                "VNE", new Date()));
 
         list.setAdapter(adapter);
 
@@ -71,9 +67,6 @@ public class PostsActivity extends Activity {
                 startActivity(writeMessage);
             }
         });
-
-//        Intent intent = new Intent(getApplicationContext(), VKLoginActivity.class);
-//        startActivityForResult(intent, 1);
 
     }
 
@@ -126,6 +119,20 @@ public class PostsActivity extends Activity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.login_to_vk:
+                Intent intent = new Intent(getApplicationContext(), VKLoginActivity.class);
+                startActivityForResult(intent, 1);
+                return true;
+            case R.id.login_to_fb:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 }

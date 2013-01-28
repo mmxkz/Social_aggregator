@@ -20,7 +20,6 @@ import org.susu.sa.soc.vk.VKWebViewClient;
 public class VKLoginActivity extends Activity {
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +27,20 @@ public class VKLoginActivity extends Activity {
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+
+        SharedPreferences prefs = getApplicationContext().getSharedPreferences(
+                "org.susu.sa", MODE_WORLD_READABLE);
+
+        if (prefs.contains("user_id") && prefs.contains("access_token")) {
+            Intent intent = new Intent();
+
+            intent.putExtra("token", prefs.getString("access_token", null));
+            intent.putExtra("user_id", prefs.getLong("user_id", 0));
+
+            setResult(Activity.RESULT_OK, intent);
+            finish();
+        }
+
 
         VKSource.callWebView(this, (WebView) findViewById(R.id.webView), new VKLogin(this));
     }
@@ -44,15 +57,19 @@ public class VKLoginActivity extends Activity {
         @Override
         public void onAuthSuccess(String accessToken, long userId) {
             SharedPreferences prefs = context.getSharedPreferences(
-                    "org.susu.sa", MODE_PRIVATE);
+                    "org.susu.sa", MODE_WORLD_READABLE);
 
-            prefs.edit().putLong("user_id", userId);
-            prefs.edit().putString("access_token", accessToken);
-            prefs.edit().commit();
-            Intent intent=new Intent();
+            SharedPreferences.Editor edit = prefs.edit();
 
-            intent.putExtra("token", accessToken);
+            edit.putLong("user_id", userId);
+            edit.putString("access_token", accessToken);
+            edit.commit();
+
+            Intent intent = new Intent();
+
+            intent.putExtra("acces_token", accessToken);
             intent.putExtra("user_id", userId);
+
             setResult(Activity.RESULT_OK, intent);
             finish();
         }

@@ -19,6 +19,8 @@ import org.susu.sa.soc.vk.VKWebViewClient;
  */
 public class VKLoginActivity extends Activity {
 
+    public static final String KEY_USER_ID = "user_id";
+    public static final String KEY_ACCESS_TOKEN = "access_token";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,16 +32,16 @@ public class VKLoginActivity extends Activity {
 
         SharedPreferences prefs = getApplicationContext().getSharedPreferences(
                 "org.susu.sa", MODE_WORLD_READABLE);
-
-        if (prefs.contains("user_id") && prefs.contains("access_token")) {
-            Intent intent = new Intent();
-
-            intent.putExtra("token", prefs.getString("access_token", null));
-            intent.putExtra("user_id", prefs.getLong("user_id", 0));
-
-            setResult(Activity.RESULT_OK, intent);
-            finish();
-        }
+//
+//        if (prefs.contains("user_id") && prefs.contains("access_token")) {
+//            Intent intent = new Intent();
+//
+//            intent.putExtra("token", prefs.getString("access_token", null));
+//            intent.putExtra("user_id", prefs.getLong("user_id", 0));
+//
+//            setResult(Activity.RESULT_OK, intent);
+//            finish();
+//        }
 
 
         VKSource.callWebView(this, (WebView) findViewById(R.id.webView), new VKLogin(this));
@@ -61,14 +63,14 @@ public class VKLoginActivity extends Activity {
 
             SharedPreferences.Editor edit = prefs.edit();
 
-            edit.putLong("user_id", userId);
-            edit.putString("access_token", accessToken);
+            edit.putLong(KEY_USER_ID, userId);
+            edit.putString(KEY_ACCESS_TOKEN, accessToken);
             edit.commit();
 
             Intent intent = new Intent();
 
-            intent.putExtra("acces_token", accessToken);
-            intent.putExtra("user_id", userId);
+            intent.putExtra(KEY_ACCESS_TOKEN, accessToken);
+            intent.putExtra(KEY_USER_ID, userId);
 
             setResult(Activity.RESULT_OK, intent);
             finish();

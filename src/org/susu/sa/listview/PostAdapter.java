@@ -5,8 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import org.susu.sa.R;
+import org.susu.sa.soc.Post;
 
 import java.util.List;
 
@@ -66,13 +68,13 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
         name.setText(entry.getSender());
 
         TextView message = (TextView) view.findViewById(R.id.message);
-        message.setText(entry.getMessage());
+        message.setText(entry.getBody());
 
         TextView date = (TextView) view.findViewById(R.id.date);
         date.setText(entry.getDate().toLocaleString());
 
-//        ImageView image = (ImageView) view.findViewById(R.id.imageView);
-//        image.setImageBitmap(posts.getBitmap());
+        ImageView image = (ImageView) view.findViewById(R.id.imageView);
+        image.setImageBitmap(entry.getBitmap());
 
         return view;
     }

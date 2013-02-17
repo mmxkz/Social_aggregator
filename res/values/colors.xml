@@ -1,4 +1,4 @@
 <resources>
     <color name="recipient_text_color">#ff0064ff</color>
-    <color name="write_message_background">#ffffff</color>
+    <color name="write_message_background">#ffffff</color><color name="showmore">#EEEEEE</color>
 </resources>

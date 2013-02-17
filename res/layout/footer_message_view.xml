@@ -8,8 +8,8 @@
     <Button android:id="@+id/show_button"
             android:layout_width="fill_parent"
             android:layout_height="50dp"
-            android:background="@color/post_name_textColor"
-            android:textColor="#ffffff"
+            android:background="@color/showmore"
+            android:textColor="#a6a6a6"
             android:text="Show more..."/>
 
 </LinearLayout>

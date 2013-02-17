@@ -2,10 +2,11 @@ package org.susu.sa.soc;
 
 import android.graphics.Bitmap;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public abstract class Post extends PostComment {
+public abstract class Post extends PostComment implements Serializable {
 
     public Post(String sender, String body, Date date, Bitmap bitmap) {
         super(sender, body, date, bitmap);

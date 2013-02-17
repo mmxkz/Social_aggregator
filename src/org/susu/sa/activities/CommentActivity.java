@@ -10,11 +10,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 import org.susu.sa.R;
-import org.susu.sa.listview.Post;
 import org.susu.sa.listview.PostAdapter;
+import org.susu.sa.soc.Post;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -40,19 +39,19 @@ public class CommentActivity extends Activity {
                 .inflate(R.layout.footer_message_view, null, false);
 
         list.addFooterView(footerView);
-
+//
         List<Post> posts = new ArrayList<Post>();
-        posts.add((Post) getIntent().getSerializableExtra("post"));
-        posts.add(new Post("Ilya", "OK LET'S DO IT", new Date()));
-        posts.add(new Post("Kosmaks", "LEEEEEEEEROY JEEEEEEENKINS", new Date()));
-        posts.add(new Post("Andrey", "U menya nedopusk :(", new Date()));
-        posts.add(new Post("Masha", "YA TP :(", new Date()));
-        posts.add(new Post("Masha", "YA TP :(", new Date()));
-        posts.add(new Post("Masha", "YA TP :(", new Date()));
-        posts.add(new Post("Masha", "YA TP :(", new Date()));
-        posts.add(new Post("Masha", "YA TP :(", new Date()));
-        posts.add(new Post("Masha", "YA TP :(", new Date()));
-        posts.add(new Post("Masha", "YA TP :(", new Date()));
+//        posts.add((Post) getIntent().getSerializableExtra("post"));
+//        posts.add(new Post("Ilya", "OK LET'S DO IT", new Date()));
+//        posts.add(new Post("Kosmaks", "LEEEEEEEEROY JEEEEEEENKINS", new Date()));
+//        posts.add(new Post("Andrey", "U menya nedopusk :(", new Date()));
+//        posts.add(new Post("Masha", "YA TP :(", new Date()));
+//        posts.add(new Post("Masha", "YA TP :(", new Date()));
+//        posts.add(new Post("Masha", "YA TP :(", new Date()));
+//        posts.add(new Post("Masha", "YA TP :(", new Date()));
+//        posts.add(new Post("Masha", "YA TP :(", new Date()));
+//        posts.add(new Post("Masha", "YA TP :(", new Date()));
+//        posts.add(new Post("Masha", "YA TP :(", new Date()));
 
         PostAdapter adapter = new PostAdapter(this, posts);
 

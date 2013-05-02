@@ -11,5 +11,4 @@
             android:background="@color/showmore"
             android:textColor="#a6a6a6"
             android:text="Show more..."/>
-
 </LinearLayout>

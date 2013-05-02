@@ -3,6 +3,7 @@ package org.susu.sa.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.*;
@@ -10,25 +11,35 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
+import org.json.JSONException;
 import org.susu.sa.R;
 import org.susu.sa.listview.PostAdapter;
 import org.susu.sa.soc.ISource;
 import org.susu.sa.soc.Post;
+import org.susu.sa.soc.PostComment;
+import org.susu.sa.soc.vk.VKPost;
 import org.susu.sa.soc.vk.VKSource;
+import com.perm.kate.api.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PostsActivity extends Activity {
 
     private List<Post> posts = new ArrayList<Post>();
-    private ArrayList<ISource> sources = new ArrayList<>();
+    private ArrayList<ISource> sources = new ArrayList<ISource>();
     private final int REQUEST_LOGIN = 1;
+    private final int REQUEST_LOGOUT = 2;
+    private final int RCode = 1;
+    public static final String APP_PREFERENCES = "mysettings";
+
+
     private PostAdapter adapter;
 
-    public final static int LOAD_STEP = 30;
+    public final static int LOAD_STEP = 20;
     private int countLoaded = LOAD_STEP;
-
+    Api api;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +72,6 @@ public class PostsActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Intent writeMessage = new Intent(getApplicationContext(), NewMessageActivity.class);
-
                 startActivity(writeMessage);
             }
         });
@@ -74,6 +84,36 @@ public class PostsActivity extends Activity {
             }
         });
 
+        refreshButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                refreshPosts();
+            }
+        });
+        list.setOnCreateContextMenuListener(this);
+
+    }
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.add(0, 0, 0, "Удалить запись");
+    }
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        try{
+            AdapterView.AdapterContextMenuInfo tmp = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+            SharedPreferences settings = getApplicationContext().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+            VKSource myApi = new VKSource(settings.getLong("user_id", 0), settings.getString("access_token", null));
+            long PostId = ((VKPost) posts.get(tmp.position-1)).getPostId();
+            Log.d("post id:","" + PostId);
+            myApi.deletePost(PostId);
+        }
+        catch (KException k) {;}
+        catch (IOException i) {;}
+        catch (JSONException j) {;}
+        refreshPosts();
+
+        Toast.makeText(getApplicationContext(),"запись удалена", Toast.LENGTH_LONG);
+        return super.onContextItemSelected(item);
     }
 
     private ListView initList(ListView list) {
@@ -99,8 +139,11 @@ public class PostsActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> arg0, View view, int position, long index) {
                 Intent comment = new Intent(getApplicationContext(), CommentActivity.class);
-                comment.putExtra("post", posts.get(position - 1 >= 0 ? position - 1 : position));
+                long tmp = ((VKPost) posts.get(position - 1)).getPostId();
+                comment.putExtra("position", tmp);
                 startActivity(comment);
+                //startActivityForResult(comment, RCode);
+
             }
         });
     }
@@ -114,10 +157,10 @@ public class PostsActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (requestCode == REQUEST_LOGIN && resultCode == RESULT_OK) {
             sources.add(
-                    new VKSource(
-                            intent.getLongExtra(VKLoginActivity.KEY_USER_ID, 0),
-                            intent.getStringExtra(VKLoginActivity.KEY_ACCESS_TOKEN)
-                    )
+                new VKSource(
+                    intent.getLongExtra(VKLoginActivity.KEY_USER_ID, 0),
+                    intent.getStringExtra(VKLoginActivity.KEY_ACCESS_TOKEN)
+                )
             );
             refreshPosts();
         }
@@ -134,10 +177,23 @@ public class PostsActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.login_to_vk:
-                Intent intent = new Intent(getApplicationContext(), VKLoginActivity.class);
-                startActivityForResult(intent, REQUEST_LOGIN);
+                Intent intentVKlogin = new Intent(getApplicationContext(), VKLoginActivity.class);
+                intentVKlogin.putExtra("key_str","login_vk");
+                startActivityForResult(intentVKlogin, REQUEST_LOGIN);
                 return true;
+
+            case R.id.logout_of_vk:
+                Intent intentVKlogout = new Intent(getApplicationContext(), VKLoginActivity.class);
+                intentVKlogout.putExtra("key_str","logout_vk");
+                startActivityForResult(intentVKlogout, REQUEST_LOGOUT);
+                return true;
+
             case R.id.login_to_fb:
+                Toast.makeText(getApplicationContext(),"Не доступно", Toast.LENGTH_LONG);
+                return true;
+
+            case R.id.logout_of_fb:
+                Toast.makeText(getApplicationContext(),"Не доступно", Toast.LENGTH_LONG);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -147,7 +203,7 @@ public class PostsActivity extends Activity {
     private void receivePosts(int count, int offset) {
         for (ISource source : sources) {
             try {
-                for (Post post : source.getPosts(count, offset)) { // LAL
+                for (Post post : source.getPosts(count, offset)) { // lalka
                     adapter.addItem(post);
                 }
             } catch (Exception e) {
@@ -157,8 +213,9 @@ public class PostsActivity extends Activity {
         countLoaded = count + offset;
     }
 
-    private void refreshPosts() {
+    public void refreshPosts() {
         // TODO clear list
+        posts.clear();
         receivePosts(countLoaded, 0);
     }
 }

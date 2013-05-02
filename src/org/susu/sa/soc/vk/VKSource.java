@@ -15,8 +15,10 @@ import org.susu.sa.soc.PostComment;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import android.util.Log;
 import java.util.Date;
 
 public class VKSource implements ISource {
@@ -55,6 +57,7 @@ public class VKSource implements ISource {
     @Override
     public ArrayList<Post> getPosts(int count, int offset) throws Exception {
         ArrayList<Post> posts = new ArrayList<Post>();
+
         // Getting messages
         ArrayList<WallMessage> wallMessages = api.getWallMessages(userId, count, offset);
         for (WallMessage message : wallMessages) cache.add(message.from_id);
@@ -65,9 +68,10 @@ public class VKSource implements ISource {
             User user = cache.get(message.from_id);
             posts.add(
                     new VKPost(this,
-                            message.id, nameByUser(user),
+                            message.id,
+                            nameByUser(user),
                             message.text,
-                            new Date(message.date),
+                            new Long(message.date),
                             getUserPictureById(user.uid)
                     )
             );
@@ -81,32 +85,44 @@ public class VKSource implements ISource {
         api.createWallPost(userId, body, null, null, false, false, false, null, null, null, null);
     }
 
-    protected void reply(VKPost post, String body) throws KException, IOException, JSONException {
-        api.createWallComment(null, post.getPostId(), body, null, null, null);
+    public void reply(VKPost post, String body, Long cid) throws KException, IOException, JSONException {
+        api.createWallComment(null, post.getPostId(), body, cid, null, null);
     }
-
-    protected ArrayList<PostComment> getComments(VKPost post, int count, int offset) throws Exception {
-        ArrayList<Comment> comments = api.getWallComments(null, post.getPostId(), offset, count).comments;
+    public void deleteComment(Long cid) throws KException, IOException, JSONException {
+        api.deleteWallComment(null,cid);
+    }
+    public void deletePost(long Post_Id)throws KException, IOException, JSONException {
+        api.removeWallPost(Post_Id, 0);
+    }
+    public ArrayList<PostComment> getComments(long postId, int count, int offset) throws Exception {
+        ArrayList<Comment> comments = api.getWallComments(null, postId, offset, count).comments;
         ArrayList<PostComment> postComments = new ArrayList<PostComment>();
 
         for (Comment comment : comments) cache.add(comment.from_id);
         cache.update();
-
+        Log.w("qwe","qwe");
         for (Comment comment : comments) {
             User user = cache.get(comment.from_id);
-            postComments.add(
-                    new PostComment(
-                            nameByUser(user),
-                            comment.message,
-                            new Date(comment.date),
-                            getUserPictureById(user.uid)
-                    )
-            );
+            String name = nameByUser(user);
+            Long cid = comment.cid;
+            Log.e("reply_to_cid","" + comment.cid);
+            postComments.add(new PostComment(name, comment.message,comment.date, null, cid));
         }
-
         return postComments;
     }
-
+//        Api api = new Api(null, null);
+//        String TmpName = api.getProfiles(comment.from_id, null,null,null).toString();
+// get user
+//        try {
+//            String TmpName = api.getProfiles(comment.from_id, null,null,null).toString();
+//
+//        }
+//        catch(KException k){
+//        }
+//        catch (JSONException j){
+//        }
+//        catch (IOException e){
+//        }
     protected Bitmap getUserPictureById(long id) {
         try {
             HttpURLConnection connection = (HttpURLConnection)

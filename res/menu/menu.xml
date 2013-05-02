@@ -2,11 +2,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@+id/login_to_vk"
-          android:icon="@drawable/vkontakte_logo"
+          android:icon="@drawable/vk_logo"
           android:title="Login to VK"
-          />
+    />
+    <item android:id="@+id/logout_of_vk"
+          android:icon="@drawable/vk_logo"
+          android:title="Logout of VK"
+    />
 
     <item android:id="@+id/login_to_fb"
-          android:icon="@drawable/ic_launcher"
-          android:title="Login to FB"/>
+          android:icon="@drawable/fb_logo"
+          android:title="Login to FB"
+    />
+    <item android:id="@+id/logout_of_fb"
+          android:icon="@drawable/fb_logo"
+          android:title="Logout of FB"
+    />
 </menu>

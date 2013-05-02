@@ -15,7 +15,8 @@
                 android:text="@string/refresh_button_name"
                 android:background="@color/post_name_textColor"
                 android:textColor="#ffffff"
-                android:layout_alignParentLeft="true" android:layout_column="0"/>
+                android:layout_alignParentLeft="true"
+                android:layout_column="0"/>
 
         <Button android:id="@+id/post_button"
                 android:layout_width="fill_parent"

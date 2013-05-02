@@ -1,23 +1,25 @@
 package org.susu.sa.listview;
 
 import android.content.Context;
+import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.perm.kate.api.Api;
+import com.perm.kate.api.KException;
+import org.json.JSONException;
 import org.susu.sa.R;
 import org.susu.sa.soc.Post;
 
+import java.io.IOException;
 import java.util.List;
 
-/**
- * User: is
- * Date: 1/12/13
- * Time: 7:51 PM
- */
-public class PostAdapter extends BaseAdapter implements View.OnClickListener {
+
+public class PostAdapter extends BaseAdapter  {
 
     private Context context;
     private List<Post> posts;
@@ -71,22 +73,18 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
         message.setText(entry.getBody());
 
         TextView date = (TextView) view.findViewById(R.id.date);
-        date.setText(entry.getDate().toLocaleString());
+        //new out date
+        date.setText(DateUtils.formatDateTime(context, entry.getDateMsg()*1000,
+                DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE));
 
         ImageView image = (ImageView) view.findViewById(R.id.imageView);
         image.setImageBitmap(entry.getBitmap());
 
         return view;
     }
-
-
-    @Override
-    public void onClick(View view) {
-
-    }
-
     public void addItem(Post post) {
         posts.add(post);
         notifyDataSetChanged();
+        Log.w("Count posts: ", "" + getCount() + "");
     }
 }

@@ -1081,12 +1081,12 @@ public class Api {
         params.put("need_likes", "1");
         JSONObject root = sendRequest(params);
         JSONArray array = root.getJSONArray("response");
-        CommentList commnets = new CommentList();
-        commnets.count=array.getInt(0);
+        CommentList comments = new CommentList();
+        comments.count=array.getInt(0);
         int category_count = array.length();
         for(int i = 1; i<category_count; ++i) //get(0) is integer, it is comments count
-            commnets.comments.add(Comment.parse((JSONObject)array.get(i)));
-        return commnets;
+            comments.comments.add(Comment.parse((JSONObject)array.get(i)));
+        return comments;
     }
     
     //http://vkontakte.ru/developers.php?o=-1&p=audio.search
@@ -1883,7 +1883,7 @@ public class Api {
         }
         return users;
     }
-    
+
     //http://vk.com/developers.php?oid=-1&p=fave.getPhotos
     public ArrayList<Photo> getFavePhotos(Integer count, Integer offset) throws MalformedURLException, IOException, JSONException, KException {
         Params params = new Params("fave.getPhotos");

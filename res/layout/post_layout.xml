@@ -57,5 +57,5 @@
             android:layout_alignParentRight="true"
             android:focusableInTouchMode="false"
             android:focusable="false"
-            android:src="@drawable/vkontakte_logo"/>
+            android:src="@drawable/vk_logo"/>
 </RelativeLayout>

@@ -8,5 +8,6 @@
     <string name="recipient_autotext">Enter a friend\'s name or leave it empty(write to the wall)</string>
     <string name="recipient_message">Message</string>
     <string name="refresh_button_name">Refresh</string>
-
+    <string name="Vk">Vkontakte</string>
+    <string name="FB">Facebook</string>
 </resources>

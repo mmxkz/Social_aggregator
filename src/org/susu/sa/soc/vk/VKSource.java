@@ -81,10 +81,16 @@ public class VKSource implements ISource {
     }
 
     @Override
-    public void newPost(String body) throws Exception {
-        api.createWallPost(userId, body, null, null, false, false, false, null, null, null, null);
+    public void newPost(String body, String services) throws Exception {
+        api.createWallPost(userId, body, null, services, false, false, false, null, null, null, null);
     }
+    public void setStatus(String status_text) throws IOException, JSONException, KException{
+        api.setStatus(status_text,null);
+    }
+    public VkStatus getStatus() throws IOException, JSONException, KException{
+        return api.getStatus(null);
 
+    }
     public void reply(VKPost post, String body, Long cid) throws KException, IOException, JSONException {
         api.createWallComment(null, post.getPostId(), body, cid, null, null);
     }

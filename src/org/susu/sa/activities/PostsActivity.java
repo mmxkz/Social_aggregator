@@ -10,6 +10,7 @@ import android.view.*;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import org.json.JSONException;
 import org.susu.sa.R;
@@ -33,12 +34,13 @@ public class PostsActivity extends Activity {
     private final int REQUEST_LOGOUT = 2;
     private final int RCode = 1;
     public static final String APP_PREFERENCES = "mysettings";
-
+    TextView statusVK;
 
     private PostAdapter adapter;
 
     public final static int LOAD_STEP = 20;
     private int countLoaded = LOAD_STEP;
+
     Api api;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,8 +55,8 @@ public class PostsActivity extends Activity {
             list.setAdapter(adapter);
             listOnClickListener(list);
         }
-
-        refreshPosts();
+        statusVK = (TextView)findViewById(R.id.StatusVK);
+//        refreshPosts();
 
         int windowWidth = getWindowManager().getDefaultDisplay().getWidth();
         int windowHeight = getWindowManager().getDefaultDisplay().getHeight();
@@ -89,6 +91,7 @@ public class PostsActivity extends Activity {
                 refreshPosts();
             }
         });
+
         list.setOnCreateContextMenuListener(this);
 
     }
@@ -124,6 +127,7 @@ public class PostsActivity extends Activity {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE))
                 .inflate(R.layout.footer_message_view, null, false);
         footerView.setEnabled(false);
+
         list.addFooterView(footerView);
 
         View headerView =  ((LayoutInflater)getApplicationContext()
@@ -217,5 +221,16 @@ public class PostsActivity extends Activity {
         // TODO clear list
         posts.clear();
         receivePosts(countLoaded, 0);
+        try{
+            SharedPreferences settings = getApplicationContext().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+            VKSource myApi = new VKSource(settings.getLong("user_id", 0), settings.getString("access_token", null));
+            ISource IApiVk = myApi;
+            VkStatus status = IApiVk.getStatus();
+            statusVK.setText(status.text);
+        }
+        catch (KException k) {;}
+        catch (IOException i) {;}
+        catch (JSONException j) {;}
+
     }
 }

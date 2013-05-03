@@ -6,34 +6,91 @@
                 android:orientation="vertical"
                 android:paddingBottom="15dp"
                 android:background="@color/write_message_background">
-
     <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingBottom="15dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true">
-        <CheckBox
-                android:id="@+id/fb_checkbox"
-                android:text="Facebook"
-                android:textColor="@color/recipient_text_color"
-                android:textSize="15dp"
-                android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left|center_vertical" android:checked="false"/>
-        <CheckBox
-                android:id="@+id/vk_checkbox"
-                android:text="Vkontakte"
-                android:textColor="@color/recipient_text_color"
-                android:textSize="15dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:singleLine="false"
-                android:layout_gravity="left|center_vertical"/>
+                android:orientation="horizontal"
+                android:layout_alignParentLeft="true">
+            <CheckBox
+                    android:id="@+id/fb_checkbox"
+                    android:text="FB"
+                    android:textColor="@color/recipient_text_color"
+                    android:textSize="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"/>
+            <!--android:layout_gravity="left|center_vertical"-->
+        </LinearLayout>
 
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_alignParentLeft="true" >
+            <CheckBox
+                    android:id="@+id/vk_checkbox"
+                    android:text="VK"
+                    android:textColor="@color/recipient_text_color"
+                    android:textSize="15dp"
+                    android:layout_width="108dp"
+                    android:layout_height="wrap_content"
+                    android:checked="false" android:singleLine="true"
+                    android:onClick='checkedVK'/>
+            <ToggleButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:text="reTwit"
+                    android:id="@+id/reTwit"
+                    android:singleLine="false"
+                    android:button="@color/post_message_textColor"
+                    android:textColor="@color/recipient_text_color"
+                    android:textOff="reTwit"
+                    android:textOn="reTwit"
+                    style="@android:style/Widget.Holo.Light.Button.Toggle"
+                    android:enabled="false"/>
+            <ToggleButton
+                    style="@android:style/Widget.Holo.Light.Button.Toggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:text="Status"
+                    android:id="@+id/statusVK"
+                    android:singleLine="false"
+                    android:button="@color/post_message_textColor"
+                    android:textColor="@color/recipient_text_color"
+                    android:textOff="Status"
+                    android:textOn="Status"
+                    android:enabled="false"/>
+           <!-- <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.1"
+                    android:text="reTwit"
+                    android:textSize="15dp"
+                    android:id="@+id/reTwit" android:layout_gravity="center|left|top" android:singleLine="false"
+                    android:clickable="false"
+                    android:checked="false"
+                    android:textColor="@color/recipient_text_color"/>
+            <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.33"
+                    android:text="Статус"
+                    android:textSize="15dp"
+                    android:id="@+id/statusVK"
+                    android:textColor="@color/recipient_text_color"
+                    android:layout_gravity="center|left"
+                    android:clickable="false"
+                    android:checked="false"/>-->
+            <!--android:layout_gravity="left|center_vertical"-->
+        </LinearLayout>
     </LinearLayout>
-    <TextView
+
+<TextView
             android:id="@+id/messageView"
             android:text="@string/recipient_message"
             android:layout_width="760dp"

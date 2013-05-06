@@ -8,6 +8,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.*;
 import com.perm.kate.api.Api;
+import com.perm.kate.api.KException;
+import org.json.JSONException;
 import org.susu.sa.R;
 import android.app.Activity;
 import android.os.Bundle;
@@ -15,6 +17,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import org.susu.sa.soc.ISource;
 import org.susu.sa.soc.vk.VKSource;
+
+import java.io.IOException;
 
 public class NewMessageActivity extends Activity {
 
@@ -25,6 +29,8 @@ public class NewMessageActivity extends Activity {
     CheckBox CheckFB;
     ToggleButton reTwit;
     ToggleButton statusVK;
+    ToggleButton wallVK;
+
     EditText messageEditText;
     String services = "";
     Api api;
@@ -44,8 +50,9 @@ public class NewMessageActivity extends Activity {
         CheckFB = (CheckBox)findViewById(R.id.fb_checkbox);
         reTwit = (ToggleButton)findViewById(R.id.reTwit);
         statusVK = (ToggleButton)findViewById(R.id.statusVK);
+        wallVK = (ToggleButton)findViewById(R.id.wallVK);
         postButton.setOnClickListener(postClick);
-        }
+    }
 
     private OnClickListener postClick = new OnClickListener(){
         @Override
@@ -58,20 +65,34 @@ public class NewMessageActivity extends Activity {
 
             reTwit.setEnabled(true);
             statusVK.setEnabled(true);
+            wallVK.setEnabled(true);
             }
         else {
             reTwit.setChecked(false);
             reTwit.setEnabled(false);
             statusVK.setChecked(false);
             statusVK.setEnabled(false);
+            wallVK.setEnabled(false);
+            wallVK.setChecked(false);
         }
     }
 
 
      private void postToWall() {
          //Общение с сервером в отдельном потоке чтобы не блокировать UI поток
-         if (CheckVK.isChecked()& !CheckFB.isChecked()){
+         if (!CheckFB.isChecked() & !CheckVK.isChecked()){
+             Toast.makeText(getApplicationContext(), "Выберите социальный сервис", Toast.LENGTH_LONG).show();
+             return;
+         }
+
+         if (CheckFB.isChecked()){
+             Toast.makeText(getApplicationContext(), "Не доступно", Toast.LENGTH_LONG).show();
+             return;
+         }
+
+         if (CheckVK.isChecked()){
              final String text = messageEditText.getText().toString();
+             if (wallVK.isChecked())
              new Thread(){
                  @Override
                  public void run(){
@@ -89,28 +110,55 @@ public class NewMessageActivity extends Activity {
                         Log.i("text:", text + "\n");
                         Log.i("Services:", services + "\n");
                         IApiVk.newPost(text,services);
-
-                        if(statusVK.isChecked()){
-                            IApiVk.setStatus(text);
-                        }
                         //Показать сообщение в UI потоке
                         runOnUiThread(successRunnable);
-                    } catch (Exception e){
-                        e.printStackTrace();
+                    }
+                    catch (IOException i){
+                        i.printStackTrace();
+                        runOnUiThread(failedRunnable);
+                    }
+                    catch (JSONException j){
+                        j.printStackTrace();
+                        runOnUiThread(failedRunnable);
+                    }
+                    catch (KException k){
+                        k.printStackTrace();
                         runOnUiThread(failedRunnable);
                     }
                  }
              }.start();
+             if (statusVK.isChecked()){
+                 new Thread(){
+                     public void run(){
+                         try{
+                             SharedPreferences settings = getApplicationContext().getSharedPreferences(
+                                     APP_PREFERENCES, Context.MODE_PRIVATE);
+                             VKSource myApi = new VKSource(settings.getLong("user_id", 0), settings.getString("access_token", null));
+                             //myApi.newPost(text);
+                             ISource IApiVk = myApi;
+                             IApiVk.setStatus(text);
+                             runOnUiThread(successRunnable);
+                         }
+                         catch (IOException i){
+                             i.printStackTrace();
+                             runOnUiThread(failedRunnable);
+                         }
+                         catch (JSONException j){
+                             j.printStackTrace();
+                             runOnUiThread(failedRunnable);
+                         }
+                         catch (KException k){
+                             k.printStackTrace();
+                             runOnUiThread(failedRunnable);
+                         }
+                     }
+                 }.start();
+             }
              messageEditText.setText("");
              messageEditText.clearFocus();
              services = "";
          }
-         if (CheckFB.isChecked()){
-             Toast.makeText(getApplicationContext(), "Не доступно", Toast.LENGTH_LONG).show();
-         }
-         if (!CheckFB.isChecked() & !CheckVK.isChecked()){
-             Toast.makeText(getApplicationContext(), "Выберите социальный сервис", Toast.LENGTH_LONG).show();
-         }
+
     }
 
     Runnable successRunnable = new Runnable(){

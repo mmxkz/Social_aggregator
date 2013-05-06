@@ -1,5 +1,6 @@
 package org.susu.sa.soc.vk;
 
+import android.util.Log;
 import com.perm.kate.api.Api;
 import com.perm.kate.api.KException;
 import com.perm.kate.api.User;
@@ -24,13 +25,17 @@ public class VKUserCache {
     }
 
     public void add(long id) {
+        Log.i("add id: ", "" + id);
         if (!cache.containsKey(id)) toReceive.add(id);
     }
 
     public void update() throws KException, IOException, JSONException {
         if (toReceive.size() <= 0) return;
-        for (User profile: api.getProfiles(toReceive, null, null, null))
+        for (User profile: api.getProfiles(toReceive, null, null, null)){
+            Log.i("olololololo: ", "" + profile.last_name);
+            Log.i("olololololo: ", "" + profile.uid);
             cache.put(profile.uid, profile);
+        }
         toReceive.clear();
     }
 }

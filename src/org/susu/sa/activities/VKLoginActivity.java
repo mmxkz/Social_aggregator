@@ -9,6 +9,7 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.webkit.WebView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 import org.susu.sa.R;
 import org.susu.sa.soc.vk.VKSource;
 import org.susu.sa.soc.vk.VKWebViewClient;
@@ -48,6 +49,7 @@ public class VKLoginActivity extends Activity {
                     setContentView(R.layout.vklogin_webview);
                     VKSource.callWebView(this, (WebView) findViewById(R.id.webView), new VKLogin(this));
                 }
+//
                 break;
             }
             case "logout_vk":{
@@ -65,6 +67,7 @@ public class VKLoginActivity extends Activity {
                 }
                 else
                     Toast.makeText(this, "You are not login to VK", Toast.LENGTH_LONG).show();
+                    //vkState.setEnabled(false);
                 break;
             }
             default:

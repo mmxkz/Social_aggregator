@@ -19,6 +19,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import android.util.Log;
+
+import java.util.Collection;
 import java.util.Date;
 
 public class VKSource implements ISource {
@@ -26,7 +28,7 @@ public class VKSource implements ISource {
     public static final String LOG_KEY = "ISource::VKSource";
     public static final String API_ID = "3354665";
 
-    private long userId;
+    public long userId;
     private String accessToken;
     private Api api;
 
@@ -80,8 +82,12 @@ public class VKSource implements ISource {
         return posts;
     }
 
+    public ArrayList<User> getProfiles(Collection<Long> uids, Collection<String> domains, String fields, String name_case) throws MalformedURLException, IOException, JSONException, KException{
+        return api.getProfiles(uids, domains, fields, name_case);
+    }
+
     @Override
-    public void newPost(String body, String services) throws Exception {
+    public void newPost(String body, String services) throws IOException, JSONException, KException {
         api.createWallPost(userId, body, null, services, false, false, false, null, null, null, null);
     }
     public void setStatus(String status_text) throws IOException, JSONException, KException{
@@ -116,20 +122,8 @@ public class VKSource implements ISource {
         }
         return postComments;
     }
-//        Api api = new Api(null, null);
-//        String TmpName = api.getProfiles(comment.from_id, null,null,null).toString();
-// get user
-//        try {
-//            String TmpName = api.getProfiles(comment.from_id, null,null,null).toString();
-//
-//        }
-//        catch(KException k){
-//        }
-//        catch (JSONException j){
-//        }
-//        catch (IOException e){
-//        }
-    protected Bitmap getUserPictureById(long id) {
+
+    public Bitmap getUserPictureById(long id) {
         try {
             HttpURLConnection connection = (HttpURLConnection)
                     new URL(cache.get(id).photo).openConnection();
@@ -137,13 +131,34 @@ public class VKSource implements ISource {
             connection.connect();
             return BitmapFactory.decodeStream(connection.getInputStream());
         } catch (Exception e) {
-            Log.e(LOG_KEY, "Unable to get bitmap: " + e.getCause().toString());
+            //Log.e(LOG_KEY, "Unable to get bitmap: " + e.getCause().toString());
             e.printStackTrace();
             return null;
         }
     }
+    public Bitmap getUserPictureById(String url) {
+        try {
+            HttpURLConnection connection = (HttpURLConnection)
+                    new URL(url).openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            return BitmapFactory.decodeStream(connection.getInputStream());
+        } catch (Exception e) {
+            //Log.e(LOG_KEY, "Unable to get bitmap: " + e.getCause().toString());
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public Bitmap getUserImage(long id) {
+        return getUserPictureById(id);
+    }
+    public static String nameByUser(User user) {
 
-    private static String nameByUser(User user) {
         return user.first_name + " " + user.last_name;
+    }
+    public String getUserName(long id){
+        User tmp  = cache.get(id);
+//        Log.i("+_+_+_+",tmp.first_name + " " + tmp.last_name);
+        return (tmp.first_name + " " + tmp.last_name);
     }
 }

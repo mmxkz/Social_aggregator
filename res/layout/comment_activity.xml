@@ -4,46 +4,62 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:paddingBottom="0dp"
     android:background="@color/write_message_background">
+    <!--android:paddingBottom="0dp"-->
+
+    <ScrollView android:id="@+id/scrollView1"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                >
+        <!--android:layout_marginLeft="20dp"-->
+        <!--android:layout_marginTop="5dp"-->
+        <!--android:layout_marginRight="20dp"-->
+        <!--android:layout_marginBottom="5dp"-->
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/TextPost"
+                    android:scrollbars="vertical"
+                    android:textColor="@color/recipient_text_color"
+                    android:hint="Сообшение..."/>
+        <!--android:maxHeight="100dp"-->
+    </ScrollView>
 
     <ListView
         android:id="@+id/CommentsView"
         android:layout_width="fill_parent"
-        android:layout_weight="0.2"
-        android:layout_height="fill_parent"
+        android:layout_height="0dp"
         android:layout_gravity="center_horizontal|top"
-     />
+        android:layout_weight="6.8"/>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:layout_width="fill_parent"
-                  android:layout_height="fill_parent"
-                  android:layout_weight="0.8"
+                  android:layout_height="0dp"
                   android:orientation="horizontal"
-                  android:background="@color/write_message_background">
+                  android:background="@color/write_message_background"
+                  android:layout_weight="1.2">
                 <EditText
-                    android:layout_width="fill_parent"
+                    android:layout_width="0dp"
                     android:layout_height="fill_parent"
                     android:id="@+id/ReplyText"
                     android:inputType="text"
                     android:layout_gravity="center_horizontal|top"
-                    android:layout_weight="3"/>
-                    <!--android:layout_below="@+id/CommentsView"-->
-                    <!--android:layout_alignParentBottom="true"-->
-                    <!--android:layout_weight="3"-->
-                    <!-- android:height="75dp" -->
-
+                    android:layout_weight="9"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginBottom="4dp"/>
                 <Button
                     android:layout_height="fill_parent"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_weight="1"
                     android:width="80dp"
                     android:text="Send"
                     android:background="@color/post_name_textColor"
                     android:textColor="#ffffff"
-                    android:id="@+id/SendComment"/>
-                    <!--android:layout_weight="1"-->
-                    <!--android:height="60dp"-->
+                    android:id="@+id/SendComment" android:layout_marginTop="2dp" android:layout_marginBottom="2dp"
+                    android:layout_marginLeft="2dp" android:layout_marginRight="2dp"/>
     </LinearLayout>
 
 </LinearLayout>

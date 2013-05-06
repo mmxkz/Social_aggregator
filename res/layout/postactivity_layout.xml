@@ -6,6 +6,24 @@
               android:background="@color/post_color"
               android:orientation="vertical"
         >
+     <LinearLayout
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:background="@color/post_color"
+                  android:id="@+id/vkInfo"
+                  android:orientation="vertical">
+         <!--тут будет инфа юзера, пока тут котик (^-^) -->
+     </LinearLayout>
+
+    <ToggleButton
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Vkontakte"
+            android:id="@+id/VKState"
+            android:layout_gravity="center|left" android:layout_marginLeft="10dp" android:layout_marginRight="10dp"
+            style="@android:style/Widget.DeviceDefault.Light.Button.Toggle" android:enabled="false"
+            android:textOff="Vkonakte" android:textOn="Vkonakte" android:onClick="VkStateClick"
+            android:clickable="true" android:checked="false"/>
     <ListView android:id="@+id/PostsView"
               android:layout_width="match_parent"
               android:layout_height="match_parent"

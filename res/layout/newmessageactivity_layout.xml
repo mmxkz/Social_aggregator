@@ -42,17 +42,17 @@
                     android:checked="false" android:singleLine="true"
                     android:onClick='checkedVK'/>
             <ToggleButton
+                    style="@android:style/Widget.Holo.Light.Button.Toggle"
                     android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:text="reTwit"
-                    android:id="@+id/reTwit"
+                    android:layout_height="wrap_content"
+                    android:text="Wall"
+                    android:id="@+id/wallVK"
                     android:singleLine="false"
                     android:button="@color/post_message_textColor"
                     android:textColor="@color/recipient_text_color"
-                    android:textOff="reTwit"
-                    android:textOn="reTwit"
-                    style="@android:style/Widget.Holo.Light.Button.Toggle"
-                    android:enabled="false"/>
+                    android:textOff="Wall"
+                    android:textOn="Wall"
+                    android:enabled="false" android:layout_gravity="center"/>
             <ToggleButton
                     style="@android:style/Widget.Holo.Light.Button.Toggle"
                     android:layout_width="wrap_content"
@@ -65,28 +65,18 @@
                     android:textOff="Status"
                     android:textOn="Status"
                     android:enabled="false"/>
-           <!-- <RadioButton
+            <ToggleButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.1"
                     android:text="reTwit"
-                    android:textSize="15dp"
-                    android:id="@+id/reTwit" android:layout_gravity="center|left|top" android:singleLine="false"
-                    android:clickable="false"
-                    android:checked="false"
-                    android:textColor="@color/recipient_text_color"/>
-            <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.33"
-                    android:text="Статус"
-                    android:textSize="15dp"
-                    android:id="@+id/statusVK"
+                    android:id="@+id/reTwit"
+                    android:singleLine="false"
+                    android:button="@color/post_message_textColor"
                     android:textColor="@color/recipient_text_color"
-                    android:layout_gravity="center|left"
-                    android:clickable="false"
-                    android:checked="false"/>-->
-            <!--android:layout_gravity="left|center_vertical"-->
+                    android:textOff="reTwit"
+                    android:textOn="reTwit"
+                    style="@android:style/Widget.Holo.Light.Button.Toggle"
+                    android:enabled="false" android:layout_gravity="center"/>
         </LinearLayout>
     </LinearLayout>
 

@@ -43,7 +43,9 @@ public class CommentActivity extends Activity {
     private CommentAdapter adapter;
     private Long Post_id;
     private Long Cid_to_Reply;
+    private String Post_text;
     EditText Reply;
+    TextView postText;
     Button Send;
     Integer countLoaded;
     @Override
@@ -53,7 +55,10 @@ public class CommentActivity extends Activity {
         ListView list = (ListView) findViewById(R.id.CommentsView);
         list.setClickable(true);
         Log.d("post id comment:", "" + getIntent().getExtras().getLong("position"));
-        Post_id = getIntent().getExtras().getLong("position");
+        Post_id = getIntent().getExtras().getLong("position",0);
+        Post_text = getIntent().getExtras().getString("text", "");
+        postText = (TextView)findViewById(R.id.TextPost);
+        postText.setText(Post_text);
         if (adapter == null) {
             list = initList(list);
             adapter = new CommentAdapter(this, comment);

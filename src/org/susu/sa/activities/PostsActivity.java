@@ -13,17 +13,12 @@ import org.susu.sa.R;
 import org.susu.sa.listview.PostAdapter;
 import org.susu.sa.soc.ISource;
 import org.susu.sa.soc.Post;
-import org.susu.sa.soc.PostComment;
 import org.susu.sa.soc.vk.VKPost;
 import org.susu.sa.soc.vk.VKSource;
 import com.perm.kate.api.*;
-import org.susu.sa.soc.vk.VKUserCache;
 
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 public class PostsActivity extends Activity  {

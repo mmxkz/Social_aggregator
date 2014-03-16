@@ -36,18 +36,16 @@ import java.util.List;
  * Time: 2:26 AM
  */
 public class CommentActivity extends Activity {
-    private static final int CM_DELETE_ID = 1;
-    private Context context = null;
-    public static final String APP_PREFERENCES = "mysettings";
-    private List<PostComment> comment = new ArrayList<PostComment>();
+    private static final String APP_PREFERENCES = "mysettings";
+    private final List<PostComment> comment = new ArrayList<PostComment>();
     private CommentAdapter adapter;
     private Long Post_id;
     private Long Cid_to_Reply;
     private String Post_text;
-    EditText Reply;
-    TextView postText;
-    Button Send;
-    Integer countLoaded;
+    private EditText Reply;
+    private TextView postText;
+    private Button Send;
+    private Integer countLoaded;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,7 +88,7 @@ public class CommentActivity extends Activity {
         });
 
     }
-    private OnClickListener SendListener = new View.OnClickListener(){
+    private final OnClickListener SendListener = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
             ReplyToComment();
@@ -111,9 +109,9 @@ public class CommentActivity extends Activity {
             VKSource myApi = new VKSource(settings.getLong("user_id", 0), settings.getString("access_token", null));
             myApi.deleteComment(itemComment.getCid());
         }
-        catch (KException k) {;}
-        catch (IOException i) {;}
-        catch (JSONException j) {;}
+        catch (KException k) {k.printStackTrace();} // todo обработать
+        catch (IOException i) {i.printStackTrace();} // todo обработать
+        catch (JSONException j) {j.printStackTrace();} // todo обработать
         refreshComments(Post_id);
         Toast.makeText(getApplicationContext(),"комментарий удален", Toast.LENGTH_LONG);
         return super.onContextItemSelected(item);
@@ -160,12 +158,12 @@ public class CommentActivity extends Activity {
         SharedPreferences settings = getApplicationContext().getSharedPreferences(
                 APP_PREFERENCES, Context.MODE_PRIVATE);
         String access_token = settings.getString("access_token", null);
-        Long user_id = settings.getLong("user_id", 22457823);
+        Long user_id = settings.getLong("user_id", 0);
         VKSource source = new VKSource(user_id, access_token);
             try {
-                for (PostComment comment : source.getComments(postId, count, offset)) { // lalka
+                for (PostComment comment : source.getComments(postId, count, offset)) {
                     adapter.addItem(comment);
-                    Log.w("ISource lalka:", "" + getIntent().getExtras().getLong("position"));
+                    Log.w("ISource entry:", "" + getIntent().getExtras().getLong("position"));
                 }
             } catch (Exception e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.

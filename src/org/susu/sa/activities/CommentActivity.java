@@ -65,7 +65,7 @@ public class CommentActivity extends Activity {
         }
         receiveComments(getIntent().getExtras().getLong("position",0), 20, 0);
 
-        Button showButton = (Button) findViewById(R.id.show_button);
+        Button showButton = (Button) findViewById(R.id.dialog_button);
 
         Reply = (EditText) findViewById(R.id.ReplyText);
         Send = (Button) findViewById(R.id.SendComment);
@@ -97,7 +97,7 @@ public class CommentActivity extends Activity {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        menu.add(0, 0, 0, "Удалить запись");
+        menu.add(0, 0, 0, "Удалить комментарий");
     }
 
     @Override
@@ -123,7 +123,7 @@ public class CommentActivity extends Activity {
         try {
             SharedPreferences settings = getApplicationContext().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
             VKSource myApi = new VKSource(settings.getLong("user_id", 0), settings.getString("access_token", null));
-            VKPost MyPost = new VKPost(myApi, post_id, null, "", null, null);
+            VKPost MyPost = new VKPost(myApi, post_id, null, "", null, null, null);
             Log.e("cid to reply:", "" + Cid_to_Reply);
             String text = Reply.getText().toString();
             MyPost.reply(text, Cid_to_Reply);

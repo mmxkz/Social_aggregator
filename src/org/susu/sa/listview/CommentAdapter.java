@@ -61,8 +61,7 @@ public class CommentAdapter extends BaseAdapter {
         PostComment comment = comments.get(i);
 
         if (view == null) {
-            LayoutInflater inflater = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.comment_layout, null);
         }
 
@@ -73,7 +72,7 @@ public class CommentAdapter extends BaseAdapter {
         message.setText(comment.getBody());
 
         TextView date = (TextView) view.findViewById(R.id.date);
-        //new out date
+
         date.setText(DateUtils.formatDateTime(context, comment.getDateMsg()*1000,
                 DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE));
 

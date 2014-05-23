@@ -25,15 +25,15 @@ public class VKUserCache {
     }
 
     public void add(long id) {
-        Log.i("add id: ", "" + id);
+        Log.i("add uid: ", "" + id);
         if (!cache.containsKey(id)) toReceive.add(id);
     }
 
     public void update() throws KException, IOException, JSONException {
         if (toReceive.size() <= 0) return;
         for (User profile: api.getProfiles(toReceive, null, null, null)){
-            Log.i("olololololo: ", "" + profile.last_name);
-            Log.i("olololololo: ", "" + profile.uid);
+            Log.i("VK Info(last name): ", "" + profile.last_name);
+            Log.i("VK Info(uid): ", "" + profile.uid);
             cache.put(profile.uid, profile);
         }
         toReceive.clear();

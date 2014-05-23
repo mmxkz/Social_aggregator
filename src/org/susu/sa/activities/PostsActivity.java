@@ -8,20 +8,21 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
+import com.google.android.gcm.GCMRegistrar;
 import org.json.JSONException;
 import org.susu.sa.R;
+import org.susu.sa.listview.MessageAdapter;
 import org.susu.sa.listview.PostAdapter;
 import org.susu.sa.soc.ISource;
 import org.susu.sa.soc.Post;
 import org.susu.sa.soc.vk.VKPost;
 import org.susu.sa.soc.vk.VKSource;
 import com.perm.kate.api.*;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 public class PostsActivity extends Activity  {
+
 
     private List<Post> posts = new ArrayList<Post>();
     private ArrayList<ISource> sources = new ArrayList<ISource>();
@@ -34,37 +35,62 @@ public class PostsActivity extends Activity  {
 
     private PostAdapter adapter;
 
+
     public final static int LOAD_STEP = 20;
     private int countLoaded = LOAD_STEP;
     private ArrayList<Long> uid = new ArrayList<Long>();
     Api api;
+
+    private String gcmRegId;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
+        // Достаем идентификатор регистрации
+
+        final String regId = GCMRegistrar.getRegistrationId(this);
+        gcmRegId = regId;
+        Log.v("GCMRegId: ",gcmRegId);
+        if (!GCMRegistrar.isRegisteredOnServer(this)){
+            GCMRegistrar.setRegisteredOnServer(this, true);
+        }
+        if (!GCMRegistrar.isRegistered(this)) { // Если отсутствует, то регистрируемся
+            GCMRegistrar.register(this, "986691428673");
+            Toast.makeText(getApplicationContext(),"GCM Registered, RegId:" + regId.toString(), Toast.LENGTH_LONG);
+        } else {
+            Log.v("GCM", "Already registered: " + regId);
+            Toast.makeText(getApplicationContext(),"GCM Registered, RegId:" + regId.toString(), Toast.LENGTH_LONG);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.postactivity_layout);
         vkState = (ToggleButton) findViewById(R.id.VKState);
-        ListView list = (ListView) findViewById(R.id.PostsView);
+        ListView Postslist = (ListView) findViewById(R.id.PostsView);
+        // Делаем проверки
+        GCMRegistrar.checkDevice(this);
+        GCMRegistrar.checkManifest(this);
 
 
         if (adapter == null) {
-            list = initList(list);
+            Postslist = initList(Postslist);
             adapter = new PostAdapter(this, posts);
-            list.setAdapter(adapter);
-            listOnClickListener(list);
+            Postslist.setAdapter(adapter);
+            listOnClickListener(Postslist);
         }
 
         int windowWidth = getWindowManager().getDefaultDisplay().getWidth();
         int windowHeight = getWindowManager().getDefaultDisplay().getHeight();
 
         Button postButton = (Button) findViewById(R.id.post_button);
-        setButtonParams(postButton, windowWidth / 2 - 40, windowHeight / 15);
-
         Button refreshButton = (Button) findViewById(R.id.refresh_button);
-        setButtonParams(refreshButton, windowWidth / 2 - 40, windowHeight / 15);
 
-        Button showMoreButton = (Button) findViewById(R.id.show_button);
-        setButtonParams(showMoreButton, windowWidth, windowHeight / 10);
-
+        Button dialogButton = (Button) findViewById(R.id.dialog_button);
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                Intent DialogIntent = new Intent(getApplicationContext(), DialogsActivity.class);
+                startActivity(DialogIntent);
+            }
+        });
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,13 +99,13 @@ public class PostsActivity extends Activity  {
             }
         });
 
-        showMoreButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                receivePosts(LOAD_STEP, countLoaded);
-            }
-        });
+//        showMoreButton.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View view) {
+//                receivePosts(LOAD_STEP, countLoaded);
+//            }
+//        });
 
         refreshButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -87,7 +113,8 @@ public class PostsActivity extends Activity  {
             }
         });
 
-        list.setOnCreateContextMenuListener(this);
+        Postslist.setOnCreateContextMenuListener(this);
+
 
     }
     @Override
@@ -101,9 +128,11 @@ public class PostsActivity extends Activity  {
             AdapterView.AdapterContextMenuInfo tmp = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
             SharedPreferences settings = getApplicationContext().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
             VKSource myApi = new VKSource(settings.getLong("user_id", 0), settings.getString("access_token", null));
-            long PostId = ((VKPost) posts.get(tmp.position-1)).getPostId();
-            Log.d("post id:","" + PostId);
-            myApi.deletePost(PostId);
+            long PostId =      ((VKPost) posts.get(tmp.position-1)).getPostId();
+            long WallOwnerId = ((VKPost) posts.get(tmp.position-1)).getOwner();
+            Log.d("wall delete post id:","" + PostId);
+            Log.d("wall delete post id:","" + WallOwnerId);
+            myApi.deletePost(PostId, WallOwnerId);
         }
         catch (KException k) {;}
         catch (IOException i) {;}
@@ -209,13 +238,12 @@ public class PostsActivity extends Activity  {
         View vkInfo = ltInflater.inflate(R.layout.vkinfo, null, false);
         if(!vkState.isChecked()){
             InfoLayout.addView(vkInfo,0);
-            vkInfoInit();
+            initUser();
             Log.i("addview: ","" + vkState.isChecked());
         }
         else{
             ((LinearLayout)InfoLayout.getParent()).removeView(vkInfo);
             InfoLayout.removeViewAt(0);
-            //vkInfoInit();
             Log.i("removeview: ","" + vkState.isChecked());
 
         }
@@ -223,8 +251,9 @@ public class PostsActivity extends Activity  {
     private void receivePosts(int count, int offset) {
         for (ISource source : sources) {
             try {
-                for (Post post : source.getPosts(count, offset)) { // lalka
+                for (Post post : source.getPosts(count, offset)) {
                     adapter.addItem(post);
+//                    Log.e("Dialog: ", post.getSender());
                 }
             } catch (Exception e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -238,10 +267,7 @@ public class PostsActivity extends Activity  {
         posts.clear();
         receivePosts(countLoaded, 0);
     }
-    public void vkInfoInit(){
-        initUser();
-        //init info vk
-    }
+
     public void initUser(){
         SharedPreferences settings = getApplicationContext().getSharedPreferences(
                 APP_PREFERENCES, Context.MODE_PRIVATE);
@@ -253,27 +279,31 @@ public class PostsActivity extends Activity  {
         TextView VkStatus = (TextView)findViewById(R.id.UserStatusVK);
         ImageView VkImage = (ImageView)findViewById(R.id.UserImageVK);
         try{
+            myApi.setNotify(gcmRegId);
+            Log.e("GCM Reg ID:", gcmRegId);
             VkStatus.setText(IApiVk.getStatus().text);
             uid.add(user_id);
-            String fields = "photo_big";
+            String fields = "photo_200";
             ArrayList<User> tmp = myApi.getProfiles(uid, null, fields,"nom");
             if (tmp.isEmpty()) {
                 Log.i("empty user info: ","" + tmp.size());
             }
             User tmpUser = tmp.get(0);
-            VkImage.setImageBitmap(myApi.getUserPictureById(tmpUser.photo_big));
-            //Log.i("user image","" + myApi.getUserImage(22457823));
+            VkImage.setImageBitmap(myApi.getUserPictureById(tmpUser.photo_200));
+            Log.i("user image","" + myApi.getUserImage(22457823));
             VkName.setText(tmpUser.first_name + " " + tmpUser.last_name);
-            //Log.i("user image","" + myApi.getUserName(22457823));
         }
         catch (IOException i) {
             i.printStackTrace();
+            Log.i("IOINFOEX",Log.getStackTraceString(i));
         }
         catch (JSONException j) {
             j.printStackTrace();
+            Log.i("JSINFOEX",Log.getStackTraceString(j));
         }
         catch (KException k) {
             k.printStackTrace();
+            Log.i("KINFOEX",Log.getStackTraceString(k));
         }
 
     }

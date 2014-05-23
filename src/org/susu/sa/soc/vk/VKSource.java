@@ -9,9 +9,7 @@ import android.webkit.CookieSyncManager;
 import android.webkit.WebView;
 import com.perm.kate.api.*;
 import org.json.JSONException;
-import org.susu.sa.soc.ISource;
-import org.susu.sa.soc.Post;
-import org.susu.sa.soc.PostComment;
+//import org.susu.sa.soc.*;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -19,6 +17,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import android.util.Log;
+import org.susu.sa.soc.ISource;
+import org.susu.sa.soc.MessageABS;
+import org.susu.sa.soc.Post;
+import org.susu.sa.soc.PostComment;
 
 import java.util.Collection;
 import java.util.Date;
@@ -59,13 +61,9 @@ public class VKSource implements ISource {
     @Override
     public ArrayList<Post> getPosts(int count, int offset) throws Exception {
         ArrayList<Post> posts = new ArrayList<Post>();
-
-        // Getting messages
         ArrayList<WallMessage> wallMessages = api.getWallMessages(userId, count, offset);
         for (WallMessage message : wallMessages) cache.add(message.from_id);
         cache.update();
-
-        // Settings messages
         for (WallMessage message : wallMessages) {
             User user = cache.get(message.from_id);
             posts.add(
@@ -74,13 +72,86 @@ public class VKSource implements ISource {
                             nameByUser(user),
                             message.text,
                             new Long(message.date),
-                            getUserPictureById(user.uid)
+                            getUserPictureById(user.uid),
+                            message.from_id
                     )
             );
         }
-
         return posts;
     }
+    public ArrayList<MessageABS> getDialogs(int count, int offset) throws Exception{
+        ArrayList<MessageABS> messages = new ArrayList<MessageABS>();
+        Log.e("Dialog: ", "getDialogs in VKSourse");
+        ArrayList<Message> dialogs = api.getMessagesDialogs(count,offset);
+        Log.e("Dialog: ", "getDialogs in VKSourse");
+        Log.e("Dialog: ", dialogs.get(1).toString());
+        for(Message message : dialogs) cache.add(message.uid);
+        cache.update();
+        for(Message message : dialogs){
+            User user = cache.get(message.uid);
+            messages.add(
+                    new VKMessage(this,
+                            message.uid,
+                            nameByUser(user),
+                            message.body,
+                            new Long(message.date),
+                            getUserPictureById(user.uid),
+                            message.uid)
+            );
+            Log.e("Dialog: ", message.toString());
+        }
+        return messages;
+    }
+    public ArrayList<MessageABS> getMessages(long uid, long start_message_id, int offset, int count) throws Exception{
+        ArrayList<MessageABS> messages = new ArrayList<MessageABS>();
+        ArrayList<Message> talks = api.getMessagesHistory(uid, start_message_id, offset, count);
+        for(Message message : talks) cache.add(message.uid);
+        cache.update();
+        for(Message message : talks){
+            User user = cache.get(message.uid);
+            Log.d(LOG_KEY,"UID: " + message.uid);
+            Log.d(LOG_KEY,"TEXT: " + message.body);
+            Log.d(LOG_KEY,"DATE: " + message.date);
+            Log.d(LOG_KEY,"ADMIN ID: " + message.admin_id);
+            Log.d(LOG_KEY,"MID: " + message.mid);
+            Log.d(LOG_KEY,"*#*#*#*#*#*#*#*#*#*#*#*#*#*");
+            messages.add(
+                    new VKMessage(this,
+                            message.uid,
+                            nameByUser(user),
+                            message.body,
+                            new Long(message.date),
+                            getUserPictureById(user.uid),
+                            message.uid)
+            );
+            Log.e("Talk: ", message.toString());
+        }
+        return messages;
+    }
+    public ArrayList<PostComment> getComments(long postId, int count, int offset) throws Exception {
+        ArrayList<Comment> comments = api.getWallComments(null, postId, offset, count).comments;
+        ArrayList<PostComment> postComments = new ArrayList<PostComment>();
+
+        for (Comment comment : comments) cache.add(comment.from_id);
+        cache.update();
+        Log.d("comments: ", cache.toString());
+        for (Comment comment : comments) {
+            Log.d(LOG_KEY,"CID: " + comment.cid);
+            Log.d(LOG_KEY,"FROM ID: " + comment.from_id);
+            Log.d(LOG_KEY,"DATE: " + comment.date);
+            Log.d(LOG_KEY,"MESSAGE: " + comment.message);
+            Log.d(LOG_KEY,"*#*#*#*#*#*#*#*#*#*#*#*#*#*");
+            User user = cache.get(comment.from_id);
+            String name = nameByUser(user);
+            Long cid = comment.cid;
+            Long owner_id = comment.from_id;
+            Log.d("reply to cid:","" + comment.cid);
+            postComments.add(new PostComment(name, comment.message,comment.date, null, cid, owner_id));
+        }
+        return postComments;
+    }
+
+
 
     public ArrayList<User> getProfiles(Collection<Long> uids, Collection<String> domains, String fields, String name_case) throws MalformedURLException, IOException, JSONException, KException{
         return api.getProfiles(uids, domains, fields, name_case);
@@ -97,32 +168,29 @@ public class VKSource implements ISource {
         return api.getStatus(null);
 
     }
+    public void setNotify(String gcmRegId) throws IOException, JSONException, KException{
+        Log.d("GCM registerDevice", gcmRegId);
+        api.registerDevice(gcmRegId,"phone","version2.1.0", 0,"msg,friend,call,reply,mention,group,like");
+    }
     public void reply(VKPost post, String body, Long cid) throws KException, IOException, JSONException {
         api.createWallComment(null, post.getPostId(), body, cid, null, null);
     }
     public void deleteComment(Long cid) throws KException, IOException, JSONException {
         api.deleteWallComment(null,cid);
     }
-    public void deletePost(long Post_Id)throws KException, IOException, JSONException {
-        api.removeWallPost(Post_Id, 0);
+    public void deletePost(long Post_Id, Long Owner_id)throws KException, IOException, JSONException {
+        api.removeWallPost(Post_Id, Owner_id);
     }
-    public ArrayList<PostComment> getComments(long postId, int count, int offset) throws Exception {
-        ArrayList<Comment> comments = api.getWallComments(null, postId, offset, count).comments;
-        ArrayList<PostComment> postComments = new ArrayList<PostComment>();
 
-        for (Comment comment : comments) cache.add(comment.from_id);
-        cache.update();
-        Log.w("qwe","qwe");
-        for (Comment comment : comments) {
-            User user = cache.get(comment.from_id);
-            String name = nameByUser(user);
-            Long cid = comment.cid;
-            Log.e("reply_to_cid","" + comment.cid);
-            postComments.add(new PostComment(name, comment.message,comment.date, null, cid));
+    public ArrayList<Message> getDialogs(long offset, int count) throws Exception {
+        ArrayList<Message> dialogs = api.getMessagesDialogs(offset, count);
+        for (Message dialog : dialogs){
+            cache.add(dialog.uid);
         }
-        return postComments;
+        cache.update();
+        Log.d("dialogs", cache.toString());
+        return dialogs;
     }
-
     public Bitmap getUserPictureById(long id) {
         try {
             HttpURLConnection connection = (HttpURLConnection)
@@ -136,6 +204,7 @@ public class VKSource implements ISource {
             return null;
         }
     }
+
     public Bitmap getUserPictureById(String url) {
         try {
             HttpURLConnection connection = (HttpURLConnection)

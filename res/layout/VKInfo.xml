@@ -5,47 +5,56 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content">
     <ImageView
-            android:layout_width="160dp"
-            android:layout_height="160dp"
+            android:layout_width="200px"
+            android:layout_height="200px"
             android:id="@+id/UserImageVK"
-            android:background="@drawable/camera_a"
+            android:background="@drawable/vk_logo_big"
             android:scaleType="matrix"
-            style="@android:style/Widget.DeviceDefault.Light"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="20dp"/>
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:orientation="vertical"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content">
-            <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="60dp"
-                    android:layout_weight="1"
-                    android:id="@+id/UserNameVK"
-                    android:textSize="30dp"
-                    android:text="UserName"
-                    android:layout_gravity="top"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="20dp"
-                    style="@android:style/TextAppearance.Holo.Widget.TextView"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginRight="20dp"
-                    android:textColor="@color/recipient_text_color" android:textStyle="bold"
-                    />
-            <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="60dp"
-                    android:layout_weight="1"
-                    android:id="@+id/UserStatusVK"
-                    android:text="UserStatus"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="20dp"
-                    style="@android:style/TextAppearance.Holo.Widget.TextView"
-                    android:layout_marginBottom="20dp"
-                    android:textColor="@color/recipient_text_color" android:layout_marginRight="20dp"
-                    android:textSize="30dp" android:enabled="false"/>
-        </LinearLayout>
+            style="@android:style/Widget.DeviceDefault.ImageButton"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"/>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+							android:weightSum="1"
+							android:divider="@android:color/background_dark">
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/UserNameVK"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="20dp"
+								android:layout_marginEnd="10dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="20dp"
+                android:textColor="@android:color/holo_blue_dark"
+                android:textSize="20dp"
+                android:typeface="normal"
+                android:singleLine="false"
+                android:editable="false"
+                android:enabled="false"
+                android:autoText="false"
+								android:ellipsize="marquee"
+								style="@android:style/Widget.Holo.TextView.SpinnerItem"/>
+
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/UserStatusVK"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="10dp"
+								android:layout_marginEnd="10dp"
+
+                android:layout_marginBottom="20dp"
+                android:textColor="@android:color/holo_blue_dark"
+                android:layout_marginRight="20dp"
+                android:textSize="20dp"
+                android:enabled="false"
+								style="@android:style/Widget.Holo.TextView.SpinnerItem"/>
+
+    </LinearLayout>
 </LinearLayout>
 

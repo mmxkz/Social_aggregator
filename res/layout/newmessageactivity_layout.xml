@@ -37,7 +37,7 @@
                     android:text="VK"
                     android:textColor="@color/recipient_text_color"
                     android:textSize="15dp"
-                    android:layout_width="108dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="false" android:singleLine="true"
                     android:onClick='checkedVK'/>
@@ -47,12 +47,14 @@
                     android:layout_height="wrap_content"
                     android:text="Wall"
                     android:id="@+id/wallVK"
-                    android:singleLine="false"
+                    android:singleLine="true"
+										android:layout_marginLeft="50dp"
                     android:button="@color/post_message_textColor"
                     android:textColor="@color/recipient_text_color"
                     android:textOff="Wall"
                     android:textOn="Wall"
-                    android:enabled="false" android:layout_gravity="center"/>
+                    android:enabled="false"
+										android:layout_gravity="center"/>
             <ToggleButton
                     style="@android:style/Widget.Holo.Light.Button.Toggle"
                     android:layout_width="wrap_content"
@@ -64,7 +66,8 @@
                     android:textColor="@color/recipient_text_color"
                     android:textOff="Status"
                     android:textOn="Status"
-                    android:enabled="false"/>
+                    android:enabled="false"
+										android:layout_marginLeft="10dp"/>
             <ToggleButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -76,7 +79,8 @@
                     android:textOff="reTwit"
                     android:textOn="reTwit"
                     style="@android:style/Widget.Holo.Light.Button.Toggle"
-                    android:enabled="false" android:layout_gravity="center"/>
+                    android:enabled="false" android:layout_gravity="center"
+										android:layout_marginLeft="10dp"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -95,7 +99,7 @@
 
     <EditText
             android:id="@+id/messageEditText"
-            android:textSize="15dp"
+            android:textSize="20dp"
             android:inputType="text"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
@@ -103,13 +107,18 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="55dp"
-            android:layout_below="@+id/messageView"/>
+            android:layout_below="@+id/messageView"
+            android:textColor="@color/recipient_text_color"
+						android:editable="true"
+						android:enabled="true"/>
 
     <Button
             android:id="@+id/write_message_button"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/messageEditText"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+
             android:layout_alignParentBottom="true"
             android:height="30dp"
             android:width="75dp"

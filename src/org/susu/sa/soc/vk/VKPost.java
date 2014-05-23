@@ -3,9 +3,8 @@ package org.susu.sa.soc.vk;
 import android.graphics.Bitmap;
 import org.susu.sa.soc.Post;
 import org.susu.sa.soc.PostComment;
-
 import java.util.ArrayList;
-import java.util.Date;
+
 
 public class VKPost extends Post {
 
@@ -14,8 +13,8 @@ public class VKPost extends Post {
     private final VKSource source;
     private long id;
 
-    public VKPost(VKSource source, long id, String sender, String message, Long date, Bitmap bitmap) {
-        super(sender, message, date, bitmap, null);
+    public VKPost(VKSource source, long id, String sender, String message, Long date, Bitmap bitmap, Long owner_id) {
+        super(sender, message, date, bitmap, null, owner_id);
         this.source = source;
         this.id = id;
     }

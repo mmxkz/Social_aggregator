@@ -25,8 +25,6 @@ public class VKLoginActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-
-
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         String key = getIntent().getExtras().getString("key_str");
@@ -34,6 +32,7 @@ public class VKLoginActivity extends Activity {
                 APP_PREFERENCES, Context.MODE_PRIVATE);
 
         String access_token = settings.getString("access_token", null);
+        long user_id = settings.getLong("user_id", 0);
         long expires = settings.getLong("access_expires", 0);
 
         switch (key){

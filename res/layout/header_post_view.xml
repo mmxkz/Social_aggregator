@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="fill_parent"
               android:layout_height="wrap_content"
               android:background="@color/post_name_textColor"
-              android:columnCount="2"
-              android:rowCount="2"
-              android:splitMotionEvents="false"
-              android:stretchColumns="0,1">
-
-    <TableRow android:layout_width="fill_parent"
-              android:baselineAligned="false">
+              android:divider="#000000"
+							android:dividerPadding="10dp"
+							android:orientation="horizontal"
+							android:weightSum="1">
 
         <Button android:id="@+id/refresh_button"
                 android:layout_width="fill_parent"
@@ -19,19 +16,28 @@
                 android:text="@string/refresh_button_name"
                 android:background="@color/post_name_textColor"
                 android:textColor="#ffffff"
-                android:layout_alignParentLeft="true"
-                android:layout_column="0"/>
+								android:layout_weight="0.33"
+
+								/>
 
         <Button android:id="@+id/post_button"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:height="50dp"
-                android:text="Send"
+                android:text="@string/send_button_name"
                 android:background="@color/post_name_textColor"
                 android:textColor="#ffffff"
-                android:layout_alignParentRight="true"
-                android:layout_column="1"/>
+								android:layout_weight="0.33"
+								/>
 
-    </TableRow>
+				<Button android:id="@+id/dialog_button"
+								android:layout_width="fill_parent"
+								android:layout_height="wrap_content"
+								android:height="50dp"
+								android:text="@string/dialog_button_name"
+								android:background="@color/post_name_textColor"
+								android:textColor="#ffffff"
+								android:layout_weight="0.33"
+								/>
 
-</TableLayout>
+</LinearLayout>

@@ -10,7 +10,7 @@ public class Auth {
     public static String redirect_url="http://oauth.vk.com/blank.html";
     
     public static String getUrl(String api_id, String settings){
-        String url="http://oauth.vk.com/authorize?client_id="+api_id+"&display=touch&scope="+settings+"&redirect_uri="+URLEncoder.encode(redirect_url)+"&response_type=token";
+        String url="http://oauth.vk.com/authorize?client_id="+api_id+"&display=page&scope="+settings+"&redirect_uri="+URLEncoder.encode(redirect_url)+"&response_type=token";
         return url;
     }
     
@@ -38,7 +38,7 @@ public class Auth {
         //1048576 stats         Доступ к статистике групп и приложений пользователя, администратором которых он является.
         //        ads
         //        nohttps 
-        int settings=1+2+4+8+16+32+64+128+1024+2048+4096+8192+65536+131072+262144+524288;
+        int settings=1+2+4+8+16+32+64+128+256+512+1024+2048+4096+8192+65536+131072+262144+524288;
         return Integer.toString(settings);
         //return "friends,photos,audio,video,docs,notes,pages,wall,groups,messages,offline,notifications";
     }

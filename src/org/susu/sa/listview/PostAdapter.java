@@ -9,13 +9,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.perm.kate.api.Api;
-import com.perm.kate.api.KException;
-import org.json.JSONException;
 import org.susu.sa.R;
 import org.susu.sa.soc.Post;
-
-import java.io.IOException;
 import java.util.List;
 
 
@@ -85,6 +80,6 @@ public class PostAdapter extends BaseAdapter  {
     public void addItem(Post post) {
         posts.add(post);
         notifyDataSetChanged();
-        Log.w("Count posts: ", "" + getCount() + "");
+        Log.d("Count posts: ", "" + getCount() + "");
     }
 }

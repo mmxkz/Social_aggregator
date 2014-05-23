@@ -3,12 +3,19 @@
           package="org.susu.sa"
           android:versionCode="1"
           android:versionName="1.0">
-    <uses-sdk android:minSdkVersion="10"/>
+					<!--android:installLocation="preferExternal">-->
+    <uses-sdk android:minSdkVersion="17"/>
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <permission android:name="org.susu.sa.permission.C2D_MESSAGE"
+                android:protectionLevel="signature" />
+    <uses-permission android:name="org.susu.sa.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <application android:label="@string/app_name">
 
         <activity android:name=".activities.PostsActivity"
-                  android:label="@string/app_name">
+                  android:label="@string/app_name"
+								android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -17,10 +24,23 @@
 
         <activity android:name=".activities.CommentActivity"
                   android:windowSoftInputMode="stateAlwaysHidden"></activity>
+				<activity android:name=".activities.DialogsActivity"
+									android:windowSoftInputMode="stateAlwaysHidden"></activity>
         <activity android:name=".activities.NewMessageActivity"
                   android:windowSoftInputMode="stateHidden"></activity>
         <activity android:name=".activities.VKLoginActivity"></activity>
+				<activity android:name=".activities.TalksActivity"
+									android:windowSoftInputMode="stateHidden"></activity>
+        <receiver android:name="com.google.android.gcm.GCMBroadcastReceiver"
+									android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                <category android:name="org.susu.sa" />
+            </intent-filter>
+        </receiver>
 
+        <service android:name=".GCMIntentService" />
     </application>
 </manifest> 
 

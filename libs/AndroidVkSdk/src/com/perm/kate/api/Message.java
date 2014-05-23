@@ -34,7 +34,7 @@ public class Message {
         }else{
             //тут не очень, потому что при получении списка диалогов если есть моё сообщение, которое я написал в беседу, то в нём uid будет мой. Хотя в других случайх uid всегда собеседника.
             m.uid = o.getLong("uid");
-            m.is_out = o.optInt("out")==1;
+            m.is_out = o.optInt("out")==me;
         }
         m.mid = o.optString("mid");
         m.date = o.getString("date");

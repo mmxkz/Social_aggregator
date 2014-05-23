@@ -582,18 +582,18 @@ public class Api {
     }
     
     //http://vkontakte.ru/developers.php?o=-1&p=messages.getHistory
-    public ArrayList<Message> getMessagesHistory(long uid, long chat_id, long me, Long offset, int count) throws MalformedURLException, IOException, JSONException, KException{
+    public ArrayList<Message> getMessagesHistory(long uid, long start_message_id, int offset, int count) throws MalformedURLException, IOException, JSONException, KException{
         Params params = new Params("messages.getHistory");
-        if(chat_id<=0)
-            params.put("uid",uid);
-        else
-            params.put("chat_id",chat_id);
+        params.put("uid",uid);
         params.put("offset", offset);
+        params.put("rev",0);
         if (count != 0)
             params.put("count", count);
+        if (start_message_id != 0)
+            params.put("start_message_id",start_message_id);
         JSONObject root = sendRequest(params);
         JSONArray array = root.optJSONArray("response");
-        ArrayList<Message> messages = parseMessages(array, chat_id<=0, uid, chat_id>0, me);
+        ArrayList<Message> messages = parseMessages(array, false, uid, true, 0);
         return messages;
     }
     
@@ -608,6 +608,7 @@ public class Api {
         JSONObject root = sendRequest(params);
         JSONArray array = root.optJSONArray("response");
         ArrayList<Message> messages = parseMessages(array, false, 0, false ,0);
+        Log.e("Dialog: ", messages.get(1).toString());
         return messages;
     }
 
@@ -1241,9 +1242,9 @@ public class Api {
     }
 
     //http://vkontakte.ru/developers.php?o=-1&p=wall.delete
-    public Boolean removeWallPost(Long post_id, long wall_owner_id) throws MalformedURLException, IOException, JSONException, KException {
+    public Boolean removeWallPost(Long post_id, Long owner_id) throws MalformedURLException, IOException, JSONException, KException {
         Params params = new Params("wall.delete");
-        params.put("owner_id", wall_owner_id);
+        params.put("owner_id", owner_id);
         params.put("post_id", post_id);
         JSONObject root = sendRequest(params);
         int response = root.optInt("response");
@@ -1802,15 +1803,18 @@ public class Api {
     }
     
     //http://vk.com/pages?oid=-1&p=account.registerDevice
-    public String registerDevice(String token, String device_model, String system_version, Integer no_text) 
+    public String registerDevice(String token, String device_model, String system_version, Integer no_text, String subscribe)
             throws MalformedURLException, IOException, JSONException, KException {
         Params params = new Params("account.registerDevice");
         params.put("token", token);
         params.put("device_model", device_model);
         params.put("system_version", system_version);
         params.put("no_text", no_text);
+        params.put("subscribe",subscribe);
         JSONObject root = sendRequest(params);
+        Log.d("GCM Response of set notify: ","" + root.getString("response"));
         return root.getString("response");
+
     }
     
     //http://vk.com/pages?oid=-1&p=account.unregisterDevice
